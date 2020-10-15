@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="zh" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>top01 - 醉芳</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="往后余生,OWASP TOP10之一1、sql注入一，SQL注入的原理和修复sql注入就是指wed应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询,"> 
+    <meta name="author" content="小树"> 
+    <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">醉芳</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">top01</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">top01</h1>
+        <div class="stuff">
+            <span>六月 20, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="OWASP-TOP10之一"><a href="#OWASP-TOP10之一" class="headerlink" title="OWASP TOP10之一"></a>OWASP TOP10之一</h1><h2 id="1、sql注入"><a href="#1、sql注入" class="headerlink" title="1、sql注入"></a>1、sql注入</h2><h3 id="一，SQL注入的原理和修复"><a href="#一，SQL注入的原理和修复" class="headerlink" title="一，SQL注入的原理和修复"></a><strong>一，SQL注入的原理和修复</strong></h3><p>sql注入就是指wed应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询，攻击者可以通过构造恶意的sql语句来实现对数据库的任意操作</p>
+<p><strong>sql注入的原理：</strong>通过sql命令插入到wed表单提交活输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的sql命令，具体说，他是利用应用程序，将恶意的sql命令注入到后台数据库引擎的能力，他可以通过wed表单中输入恶意sql语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行sql语句。造成sql注入漏洞的原因有两个：一个是没有对输入的数据进行过滤（过滤输入），还有一个是没有对发送到数据库的 数据进行转义（转义输出）。</p>
+<p><strong>修复方案：</strong>1，建议在代码中对数字类型的参数进行数字转换，然后在带入到sql查询语句中，这样任何注入行为都不能成功。2，考虑过滤一些参数，比如get参数和post参数中对于sql语言查询的部分。3，对用户的输入进行检查，特别是一些特殊字符，比如，双引号，分号，逗号，冒号，连接号等进行转换或者过滤</p>
+<h2 id="二，关于数据库"><a href="#二，关于数据库" class="headerlink" title="二，关于数据库"></a><strong>二，关于数据库</strong></h2><p>MySQL5.0版本后，MySQL默认在数据库中存放一个information_schema的数据库，在该库中，我们需要记住三个表名，分别是schemata，tables，columns。</p>
+<p>a）Schemata表存储的是该用户创建的所有数据库的库名，需要记住该表中记录数据库名的字段名为schema_name。</p>
+<p>b）Tables表存储改用户创建的所有数据库的库名，表名，要记住该表中记录数据库库名和表名的字段分别是table_schema和table_name.</p>
+<p>c）Columns表存储该用户创建的所有数据库的库名表名，字段名，要记住该表中记录数据库库名，表名，字段名table_schema，table_name，columns_name。</p>
+<h2 id="三，sql注入的类型介绍"><a href="#三，sql注入的类型介绍" class="headerlink" title="三，sql注入的类型介绍"></a><strong>三，sql注入的类型介绍</strong></h2><p><strong>按照注入点类型来分类</strong></p>
+<p>（1）数字型注入点</p>
+<p>类似结构<a href="http://xxxxxx.com/users.php?id=1" target="_blank" rel="noopener">http://xxxxxx.com/users.php?id=1</a> 基于这种形式的注入，一般被称为数字型注入点，基于是其注入点id类型为数字，在大多数的网页里面，如查看用户个人信息，查看文章等，大都会使用这种形式的结构传递id等信息，交给后端，查询出数据库中对应的信息，返回前台。这一类的sql语句圆形大概为select * from 表名 where id=1 若存在注入，我们可以构造类似与如下的sql注入语句进行爆破：</p>
+<p>​              <strong>select * from 表名 where id=1 and 1=1</strong></p>
+<p>（2）字符型注入点</p>
+<p>类似结构<a href="http://xxx.com/users.php?name=admin" target="_blank" rel="noopener">http://xxx.com/users.php?name=admin</a> 这种形式的，其注入点name类型为字符型，所以叫字符型注入点。这一类的sql语句原型大概为select * from 表名 where name= ‘admin’ 相对比数字型注入类型的sql语句原型多了引号，可以是单引号或者是双引号。若存在注入，我们可以构造出类似与如下的sql注入语句进行爆破：</p>
+<p>​          <strong>select *from 表名 where name=‘admin’ and 1=1 ‘</strong></p>
+<p><strong>按照数据提交的方式来分类</strong></p>
+<p>（1）GET注入</p>
+<p>提交数据的方式是GET，注入点的位置在GET参数部分。比如有这样的一个链接http:xxx.com/news.php?id=1，id是注入点</p>
+<p>（2）POST注入</p>
+<p>使用POST方式提交数据，注入点位置在POST数据部分，常发生在表单中。</p>
+<p>（3）Cookie注入</p>
+<p>HTTP请求的时候会带上客户端的Cookie，注入点存在Cookie当中的额某个字段中</p>
+<p>（4）HTTP头部注入</p>
+<p>注入点在HTTP请求头部的某个字段中。比如存在User-Agent字段中。严格讲的话，Cookie其实应该也是算头部注入的一种形式，因为在HTTP请求的是后，Cookie是头部的一个字段。</p>
+<p><strong>按照执行效果来分类</strong></p>
+<p>（1）基于布尔的盲注</p>
+<p>根据返回页面判断条件真假的注入</p>
+<p>（2)基于时间的盲注</p>
+<p>不可以根据页面返回内容判断任何信息。用条件语句查看时间延迟语句是否执行（也就是页面返回时间是否增加）来判断</p>
+<p>（3）基于报错注入</p>
+<p>页面会返回错误信息，或者把注入的语句的结果直接返回在页面中</p>
+<p>单引号</p>
+<p>双引号</p>
+<p>基于数字型注入</p>
+<p>（4）联合查询注入</p>
+<p>可以使用union的情况下的注入</p>
+<p>（5）堆查询注入</p>
+<p>可以同时执行多条语句的执行时的注入</p>
+<p>（6）宽字节注入</p>
+<p>宽字节注入主要是缘于程序员设置数据库编码与php编码为不同的两个编码，这样就可能会产生宽字节注入。</p>
+<h2 id="四，sql漏洞探测方法"><a href="#四，sql漏洞探测方法" class="headerlink" title="四，sql漏洞探测方法"></a><strong>四，sql漏洞探测方法</strong></h2><p>sql注入一般存在于如：<a href="http://xxx.xxx.xxx/abc.asp?id=XX" target="_blank" rel="noopener">http://xxx.xxx.xxx/abc.asp?id=XX</a> 等带有参数的ASP动态网页中，有时一个动态网页可能只有一个参数，有时可能有N个参数，有时是整型参数，有时是字符串型参数，不能一概而论。总之只要是带有参数的动态网页并且该网页访问了数据库，那么就有可能存在sql注入</p>
+<p>1，先加入单引号 ‘ 、双引号 “、看看是否报错，如果报错就可能存在sql注入漏洞了。</p>
+<p>2，在URL后面加入and 1=1、and 1=2 看页面是否都显示一样，显示不一样的话，就肯定存在sql注入漏洞</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

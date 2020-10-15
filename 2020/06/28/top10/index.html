@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="zh" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>top10 - 醉芳</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="往后余生,OWASP top10之十10，未验证的重定向和转发重定向和转发的概念在我们实际上网过程中，会浏览多个网页，进行多次跳转，将一个域名引导到另一个域名有两种方式重定向和转发，转发采用隐蔽路径的方式，而,"> 
+    <meta name="author" content="小树"> 
+    <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">醉芳</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">top10</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">top10</h1>
+        <div class="stuff">
+            <span>六月 28, 2020</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <h1 id="OWASP-top10之十"><a href="#OWASP-top10之十" class="headerlink" title="OWASP top10之十"></a>OWASP top10之十</h1><h2 id="10，未验证的重定向和转发"><a href="#10，未验证的重定向和转发" class="headerlink" title="10，未验证的重定向和转发"></a>10，未验证的重定向和转发</h2><h3 id="重定向和转发的概念"><a href="#重定向和转发的概念" class="headerlink" title="重定向和转发的概念"></a>重定向和转发的概念</h3><p>在我们实际上网过程中，会浏览多个网页，进行多次跳转，将一个域名引导到另一个域名有两种方式重定向和转发，转发采用隐蔽路径的方式，而重定向采用不隐蔽路劲的方式</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>重定向是服务器根据逻辑，发送一个状态码（通常为3xx），告诉浏览器重新去请求那个地址，所以地址栏显示的是新的URL。（重定向是在客户端完成的）</p>
+<h3 id="转发"><a href="#转发" class="headerlink" title="转发"></a>转发</h3><p>转发是在服务器内部将请求转发给另一个资源，把那个URL的响应内容读取过来，然后把这些内容再发给浏览器，浏览器根本不知道服务器发送的内容从哪里来的，因为这个跳转过程是在服务器实现的，并不是在客户端实现的所以客户端并不知道这个跳转动作，所以他的地址还是原来的地址。（转发是在服务器端完成的）</p>
+<h3 id="两者的区别"><a href="#两者的区别" class="headerlink" title="两者的区别"></a>两者的区别</h3><p>1，重定向是在浏览器向服务器发送一个请求并收到响应后再次向一个新地址发出请求，转发是服务器收到请求后为了完成响应跳转到一个新的地址</p>
+<p>2，重定向有两次请求，不共享数据，转发是有一次请求且共享数据</p>
+<p>3，重定向后地址栏会发生变化，转发不会</p>
+<p>4，重定向的地址可以是任意地址，转发的二地址只能是当前应用类的某一个地址</p>
+<h3 id="重定向的几种方式"><a href="#重定向的几种方式" class="headerlink" title="重定向的几种方式"></a>重定向的几种方式</h3><p>1，手工重定向</p>
+<p>​        点击herf链接来跳转到新页面</p>
+<p>2，响应状态码重定向（location表示重定向后网页）</p>
+<p>​        301永久重定向（网站在响应的location）</p>
+<p>​        302临时重定向、</p>
+<p>3，服务器端重定向</p>
+<p>​        修改wed服务器配置文件或脚本来实现重定向</p>
+<p>4，meta refresh</p>
+<p>​        利用HTTP的refresh标签或者响应头refresh属性来设置</p>
+<p>5，客户端跳转</p>
+<p>​        利用rul参数重定向，控制不严可能会导致用户访问恶意网站</p>
+<h3 id="未验证的重定向和转发"><a href="#未验证的重定向和转发" class="headerlink" title="未验证的重定向和转发"></a>未验证的重定向和转发</h3><p>下面介绍一下影响危害</p>
+<p>在wed应用中，重定向和转发可以使我们愉快的浏览网页 ，那么这个漏洞是怎么来的呢？？重点就是没有对带有用户输入参数的目的url做验证，而这个时候攻击者就可以引导用户访问他们所要用户访问的站点。这个额漏洞最常见的就是钓鱼网站的使用。</p>
+<p>比如。<a href="http://www.baidu.com/sss.php?target=http://diaoyu.com">http://www.baidu.com/sss.php?target=http://diaoyu.com</a> 攻击者把这个钓鱼连接发给受害者，那么安全检测的软件就判断这个链接来自百度，是可信任的站点。但是受害者点击后则会跳转到钓鱼网站或者其他欺骗木马之类的站点等</p>
+<p>此外还有获取信息，访问恶意网站，随意 跳转，安装恶意软件等</p>
+<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><p>1，抓包工抓包，抓到302的url，修改看能否正常跳转</p>
+<p>2，浏览代码，看代码中含有重定向和转发的内容，看目的url中是否含有用户输入的参数</p>
+<p>3，点击操作网站，观察在重定向之前用户输入的参数有没有出现在某一个URL或者很多URL中</p>
+<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><p>重定向外部网站需要验证是否在白名单，转发内部网站要验证是否有权限，有权限才转发</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title='0' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                        
+                            <li title='1' data-url='https://link.hhtjim.com/qq/playsong.mp3'></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+		data-enable='true'
+        data-ae='true'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>

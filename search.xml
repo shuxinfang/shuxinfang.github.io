@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/10/14/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>owasp_wjsc</title>
+    <url>/2020/07/16/owasp-wjsc/</url>
+    <content><![CDATA[<h1 id="wed渗透至文件上传漏洞总结"><a href="#wed渗透至文件上传漏洞总结" class="headerlink" title="wed渗透至文件上传漏洞总结"></a>wed渗透至文件上传漏洞总结</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><p>​        文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过脚本文件获得了执行服务器端命令的能力。常见场景是wed服务器允许上传图片或者普通文本保存，而用户绕过上传机制上上传恶意代码并执行从而控制服务器，显然这种漏洞是getshell最快最直接的方法之一，需要说明的是上传文件操作本身是没有问题的，问题在于文件上传到服务器后，服务器怎处理和解释文件</p>
+<p>常见校验上传文件的方法</p>
+<h2 id="客户端校验"><a href="#客户端校验" class="headerlink" title="客户端校验"></a>客户端校验</h2><p>​        1、通过javascript来校验上传文件的猴嘴是否合法，可以采用白名单，也可以采用黑名单的方式</p>
+<p>​        2、判断方式：在浏览器加载文件，但还未点击上传按钮便弹出对话框，内容如：只允许上传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包</p>
+<h2 id="服务器端校验"><a href="#服务器端校验" class="headerlink" title="服务器端校验"></a>服务器端校验</h2><p>​        1、校验请求头content-type字段，例如用PHP检测</p>
+<p>​        2、</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if($_FILES[&#39;usefile&#39;][type] !&#x3D; &quot;image&#x2F;gif&quot;)&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        3、通过自己写正则匹配来判断文件幻数（文件头）内容是否符合要求，一般来说属于白名单的检测，常见的文件头（文件头标志位）如下</p>
+<p>(1).jpeg;.jpe;.jpg, “jpggraphicfile”(FFD8FFFE00)</p>
+<p>(2).git ,”GIF89A”(4749463839361)</p>
+<p>(3).zip, “ZipCompressed” (504B0304)</p>
+<p>4）.doc;.xls;.xlt;.ppt;.apr，”MSCompoundDocumentv1orLotusApproachAPRfile”（D0CF11E0A1B11AE1)</p>
+<p>​        4、文件加载检测：一般是调用API或函数去进行文件加载测试，例如图像渲染测试，当测试结果正常的时候才允许上传</p>
+<p>​        1，一次渲染（代码注入）</p>
+<p>​        2，二次渲染</p>
+<p>​        </p>
+<p>​        5、后缀名黑名单校验</p>
+<p>​        6、后缀名白名单校验</p>
+<p>​        7、自定义</p>
+<p>*WAF校验，及时用不同的WAF产品来进行过滤，通常是独立于服务程序的一段中间程序或者硬件。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>sqli04-05</title>
+    <url>/2020/07/09/sqli04-05/</url>
+    <content><![CDATA[<h1 id="sqli靶场注入"><a href="#sqli靶场注入" class="headerlink" title="sqli靶场注入"></a>sqli靶场注入</h1><h2 id="04"><a href="#04" class="headerlink" title="04"></a>04</h2><p>老样子，输入？id=1，然后输入?id=1’，发现没反应，随后测一下 “ ，回显报错，得了，其他的还是跟第一关差不多，只是把 ‘ 改成 ” ，然后进行一系列的注入</p>
+<p>可以去查看我前面的<a href="https://shuxinfang.github.io/2020/07/06/sqli-01/" target="_blank" rel="noopener">sqli靶场注入01</a></p>
+<h2 id="05"><a href="#05" class="headerlink" title="05"></a>05</h2><p>依旧?id=1 和？id=1’测注入类型，结果发现，无论哪个都没反应，查看标题，提示说是二次查询注入，</p>
+<p>那么什么是二次查询注入呢？</p>
+<p>双查询注入其实就是一个select语句中再嵌套一个select语句，嵌套的这个语句称作子查询，</p>
+<p>网上有三个方法做这道题，我们这里就用其他的一种来做这道题，当然做题没有唯一解题思路，大家可以自由发挥，我写的这一篇文章，也只是仅供参考而已</p>
+<p>采用sqlmap注入</p>
+<h2 id="主要使用的语句"><a href="#主要使用的语句" class="headerlink" title="主要使用的语句"></a>主要使用的语句</h2><p>1：用于验证时间延迟型的盲注：?id=1’ and sleep(5) –+</p>
+<p>2.用于判断布尔型盲注：?id=1’ and 1=1 –+ , ?id=1‘ and 2=1 –</p>
+<p>sqlmap主要使用的语句：</p>
+<p><code>python sqlmap.py -u http://127.0.0.1/sqli-labs/Less-8/?id=1 --technique B --dbms mysql --dbs --batch -v 0</code><br><code>或者</code><br><code>python sqlmap.py -u &quot;http://127.0.0.1/sqli-labs/Less-8/?id=1&quot; --technique B --current-db --batch</code></p>
+<p>其中的<strong>—technique</strong>是为sqlmap中的注入技术，在sqlmap中其支持5中不同模式的注入</p>
+<p>B:Boolean-based-blind  （布尔型盲注）</p>
+<p>E:Error-based   （报错型注入）</p>
+<p>U:Union query-based  （联合注入）</p>
+<p>S:Starked queries   （通过sqlmap读取文件系统、操作系统、注册表必须 使用该参数，可多语句查询注入）</p>
+<p>T:Time-based blind  （基于时间延迟注入）</p>
+<p>我们可以根据不同的报错提示更改<strong>—technique</strong>后面的字母</p>
+<p>—dbms ： 不仅可以指定数据库类型，还可以指定数据库版本</p>
+<p>–batch: 用此参数，不需要用户输入，将会使用sqlmap提示的默认值一直运行下去。</p>
+<p>-v 0参数只是为了更好的截图.</p>
+<p>手工发现只能用报错注入，5关是单引号闭合，6关是双引号闭合</p>
+<p>那么sqlmap语句：python sqlmap.py -u “<a href="http://127.0.0.1/sqli-labs/Less-5/?id=1&quot;" target="_blank" rel="noopener">http://127.0.0.1/sqli-labs/Less-5/?id=1&quot;</a> –technique E –dbs –batch</p>
+<p><img src="/2020/07/09/sqli04-05/sqli04-05%5C02.png" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>sqli02-3</title>
+    <url>/2020/07/08/sqli02-3/</url>
+    <content><![CDATA[<h1 id="sql靶场手工注入"><a href="#sql靶场手工注入" class="headerlink" title="sql靶场手工注入"></a>sql靶场手工注入</h1><h2 id="02关"><a href="#02关" class="headerlink" title="02关"></a>02关</h2><p>有了第一关的思路，对SQL注入也有一定的了解了吧，接着来到第二关，往下看</p>
+<p>还是来一波判断注入类型加入 ‘  报错提醒，和第一关一样。我可以猜想：1，可能是我们的 ’ 没有被过滤，导致语法错误。2，可能及时简单的“字符”注入从而导致多出来一个 ‘ ，导致语法错误</p>
+<p>?id=1’ –+</p>
+<p><img src="/2020/07/08/sqli02-3/01.png" alt></p>
+<p>接下来，验证一下我们的猜想</p>
+<p>这是第一种猜想</p>
+<p>?id=1’ and 1=1 –+</p>
+<p><img src="/2020/07/08/sqli02-3/02.png" alt></p>
+<p>这是第二种猜想</p>
+<p>?id=1 and 1=1 –+</p>
+<p><img src="/2020/07/08/sqli02-3/03.png" alt></p>
+<p>由此可以判断我们第二种猜想是一样的，可判断为数字型注入，</p>
+<p>接着判断是否存在注入点：</p>
+<p><img src="/2020/07/08/sqli02-3/04.png" alt></p>
+<p>没有回显，所以这里存在注入点，接下来，猜字段：</p>
+<p>（这里就不一一猜了，从1到4，只有4会回显错误，说明字段有3）</p>
+<p>?id=1 order by 4 –+</p>
+<p><img src="/2020/07/08/sqli02-3/05.png" alt></p>
+<p>接下来就union操作符进行联合查询</p>
+<p>?id=-1 union select 1,2,3 –+</p>
+<p>获得数据在2和3字段里面</p>
+<p><img src="/2020/07/08/sqli02-3/06.png" alt></p>
+<p>接下来就是用version（）看版本</p>
+<p>用database（）看当前网站使用的数据库：</p>
+<p>?id=-1 union select 1,version(),database() –+</p>
+<p><img src="/2020/07/08/sqli02-3/07.png" alt></p>
+<p>通过上面的语句可以得到版本是5.7.23</p>
+<p>数据库是 security</p>
+<p>接下来就是看数据库中的表名称信息：</p>
+<p>?id=-1 union select 1,2,grouo_concat(table_name) from information_schema.tables where table_schema=’security’</p>
+<p><img src="/2020/07/08/sqli02-3/08.png" alt></p>
+<p>查看库里的所有表</p>
+<p>?id=-1 union select 1,2group_concat(column_name) from information_schema,columns where table_name=’users’ –+</p>
+<p>查看表里的用户名和密码</p>
+<p>?id=-1 union select 1,2,group_concat(username,0x3a,password) from users –+</p>
+<p>到了这一步，就已经可以获得了用户名和密码了</p>
+<p>第二关和第一关都是差不多的，只是注入类型不一样的，后面的都差不多</p>
+<h2 id="03"><a href="#03" class="headerlink" title="03"></a>03</h2><p>还是判断注入类型先，然后这一次却看到了一个小括号</p>
+<p><img src="/2020/07/08/sqli02-3/09.png" alt></p>
+<p>可以猜想，这一次使用 ）闭合的，就验证一下</p>
+<p><img src="/2020/07/08/sqli02-3/10.png" alt></p>
+<p>猜想正确</p>
+<p>其他的跟上面的一样</p>
+<p>第三关需要加上）来闭合前面的SQL语句</p>
+<p>所以综合起来，前面三关的难度的话会相对的简单一些，只要理解了第一关，其他的都是差不多的</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>sqli_01</title>
+    <url>/2020/07/06/sqli-01/</url>
+    <content><![CDATA[<h1 id="sqli靶场手工注入"><a href="#sqli靶场手工注入" class="headerlink" title="sqli靶场手工注入"></a>sqli靶场手工注入</h1><h2 id="01关"><a href="#01关" class="headerlink" title="01关"></a>01关</h2><p>1、打开靶场，首先测试是否存在漏洞，直接在URL后面加上?id=1’,看看是否报错</p>
+<p><img src="/2020/07/06/sqli-01/01.png" alt></p>
+<p>看来是存在漏洞的了</p>
+<p>2、接下来，我们测试使用查询显示数据库行数?id=1’ order by 1 –+</p>
+<p>从1到4的是时候就，只有4报错，可以显示数据的只有两行</p>
+<p><img src="/2020/07/06/sqli-01/02.png" alt></p>
+<p><img src="/2020/07/06/sqli-01/03.png" alt></p>
+<p>使用union select进行联合查询，爆出位置</p>
+<p><img src="/2020/07/06/sqli-01/04.png" alt></p>
+<p>3、进行下一步的操作前，先补充几个函数：</p>
+<p>​            （1）version（）：查看数据库版本</p>
+<p>​            （2）user（）：查看当前用户</p>
+<p>​            （3）database（）：当前使用的数据库</p>
+<p>​            （4）limit：limit子句来分批获取所有数据</p>
+<p>​            （5）group_concat（）：一次性获取跑数据库信息</p>
+<p>4、查询当前使用的数据库版本和数据库名：</p>
+<p>?id=-1’ union select 1,version,database() –+</p>
+<p><img src="/2020/07/06/sqli-01/05.png" alt></p>
+<p>由图可知，数据库版本是5.7.26的，数据库名是security</p>
+<p>5、查询库里所有表?id=-1’ union select 1,2,group_concat(table_name) from information_schema.tables where tables_schema=’security’ –+</p>
+<p><img src="/2020/07/06/sqli-01/06.png" alt></p>
+<p>6、查询表里的字段名?id=-1’ union select 1,2,group(column_name) from information_schema.columns where table_name=’users’ –+</p>
+<p><img src="/2020/07/06/sqli-01/07.png" alt></p>
+<p>7、查询表里用户名和密码：</p>
+<p>?id=-1’ union select 2,3,group_concat(username,0x3a,password) from users –+</p>
+<p>0x3a：0x是十六进制标志，3a是十进制的58，是ascii中的 ‘ ：’，用以分割pasword和username</p>
+<p><img src="/2020/07/06/sqli-01/sqli-01%5C08.png" alt></p>
+<p>第一关的手工注入就此结束！！！！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>xss_test08-10</title>
+    <url>/2020/07/02/xss-test08-10/</url>
+    <content><![CDATA[<h2 id="（8）第八关"><a href="#（8）第八关" class="headerlink" title="（8）第八关"></a>（8）第八关</h2><p>输入script，src，data，href，on都被转换了。“ 也被编码了，但是尖括号等没有被过滤，输出点又在a标签内，href属性中，但是javascript会被替换成javasc_rpt，我们就对r进行编码转化成&amp;#x72</p>
+<p><img src="/2020/07/02/xss-test08-10/01.png" alt></p>
+<h2 id="9-第九关"><a href="#9-第九关" class="headerlink" title="(9)第九关"></a>(9)第九关</h2><h4 id="老样子，对script，on，data，href，src这些进行排除，都是被转换了，查看源码，发现还多了一个限制条件"><a href="#老样子，对script，on，data，href，src这些进行排除，都是被转换了，查看源码，发现还多了一个限制条件" class="headerlink" title="老样子，对script，on，data，href，src这些进行排除，都是被转换了，查看源码，发现还多了一个限制条件"></a>老样子，对script，on，data，href，src这些进行排除，都是被转换了，查看源码，发现还多了一个限制条件</h4><p><img src="/2020/07/02/xss-test08-10/02.png" alt></p>
+<h4 id="限制条件：没有带-http-都被视为不合法的链接，那我们就直接加载后面去看看"><a href="#限制条件：没有带-http-都被视为不合法的链接，那我们就直接加载后面去看看" class="headerlink" title="限制条件：没有带 http:// 都被视为不合法的链接，那我们就直接加载后面去看看"></a>限制条件：没有带 http:// 都被视为不合法的链接，那我们就直接加载后面去看看</h4><p><img src="/2020/07/02/xss-test08-10/03.png" alt></p>
+<h4 id="ok，下一关"><a href="#ok，下一关" class="headerlink" title="ok，下一关"></a>ok，下一关</h4><h2 id="（10）第十关"><a href="#（10）第十关" class="headerlink" title="（10）第十关"></a>（10）第十关</h2><h4 id="来到第十关，啥框框都没有了，猜想是否被html的代码隐藏了，"><a href="#来到第十关，啥框框都没有了，猜想是否被html的代码隐藏了，" class="headerlink" title="来到第十关，啥框框都没有了，猜想是否被html的代码隐藏了，"></a>来到第十关，啥框框都没有了，猜想是否被html的代码隐藏了，</h4><p><img src="/2020/07/02/xss-test08-10/04.png" alt></p>
+<h4 id="按下F12，发现了type-hidden，这里我们改成type-”text“，ok，输入框出现"><a href="#按下F12，发现了type-hidden，这里我们改成type-”text“，ok，输入框出现" class="headerlink" title="按下F12，发现了type=hidden，这里我们改成type=”text“，ok，输入框出现"></a>按下F12，发现了type=hidden，这里我们改成type=”text“，ok，输入框出现</h4><h4 id="在查看源码的过程中，发现有三个变量被隐藏起来：t-link-t-history，t-sort这三个变量，其中只有t-sort这个参数可以接收，其他的都被隐藏起来"><a href="#在查看源码的过程中，发现有三个变量被隐藏起来：t-link-t-history，t-sort这三个变量，其中只有t-sort这个参数可以接收，其他的都被隐藏起来" class="headerlink" title="在查看源码的过程中，发现有三个变量被隐藏起来：t_link , t_history，t_sort这三个变量，其中只有t_sort这个参数可以接收，其他的都被隐藏起来"></a>在查看源码的过程中，发现有三个变量被隐藏起来：t_link , t_history，t_sort这三个变量，其中只有t_sort这个参数可以接收，其他的都被隐藏起来</h4><p><img src="/2020/07/02/xss-test08-10/05.png" alt></p>
+<h4 id="就利用这个传入text，闭合接着弹窗，ok，下一关"><a href="#就利用这个传入text，闭合接着弹窗，ok，下一关" class="headerlink" title="就利用这个传入text，闭合接着弹窗，ok，下一关"></a>就利用这个传入text，闭合接着弹窗，ok，下一关</h4>]]></content>
+  </entry>
+  <entry>
+    <title>xss_test06-07</title>
+    <url>/2020/07/01/xss-test06-07/</url>
+    <content><![CDATA[<h1 id="（5）第五关"><a href="#（5）第五关" class="headerlink" title="（5）第五关"></a>（5）第五关</h1><h4 id="无论是href，还是script或者是oninput，都被转换了"><a href="#无论是href，还是script或者是oninput，都被转换了" class="headerlink" title="无论是href，还是script或者是oninput，都被转换了"></a>无论是href，还是script或者是oninput，都被转换了</h4><p><img src="/2020/07/01/xss-test06-07/01.png" alt></p>
+<p><img src="/2020/07/01/xss-test06-07/02.png" alt></p>
+<p><img src="/2020/07/01/xss-test06-07/03.png" alt></p>
+<h4 id="那只能试试大小写可不可以绕过这个限制了"><a href="#那只能试试大小写可不可以绕过这个限制了" class="headerlink" title="那只能试试大小写可不可以绕过这个限制了"></a>那只能试试大小写可不可以绕过这个限制了</h4><p><img src="/2020/07/01/xss-test06-07/04.png" alt></p>
+<h4 id="过关，下一个。"><a href="#过关，下一个。" class="headerlink" title="过关，下一个。"></a>过关，下一个。</h4><h2 id="（7）第七关"><a href="#（7）第七关" class="headerlink" title="（7）第七关"></a>（7）第七关</h2><h4 id="输入‘-“-gt-判断是什么闭合"><a href="#输入‘-“-gt-判断是什么闭合" class="headerlink" title="输入‘ “ &gt;判断是什么闭合"></a>输入‘ “ &gt;判断是什么闭合</h4><p><img src="/2020/07/01/xss-test06-07/05.png" alt></p>
+<h4 id="由此可以判断是-”-闭合，输入上一关的大小写试一下"><a href="#由此可以判断是-”-闭合，输入上一关的大小写试一下" class="headerlink" title="由此可以判断是 ” 闭合，输入上一关的大小写试一下"></a>由此可以判断是 ” 闭合，输入上一关的大小写试一下</h4><p><img src="/2020/07/01/xss-test06-07/06.png" alt></p>
+<h4 id="发现script被过滤了，那我们试一下，oninput"><a href="#发现script被过滤了，那我们试一下，oninput" class="headerlink" title="发现script被过滤了，那我们试一下，oninput"></a>发现script被过滤了，那我们试一下，oninput</h4><p><img src="/2020/07/01/xss-test06-07/07.png" alt></p>
+<h4 id="发现又是on点击事件限制，那我们就试试别的办法，"><a href="#发现又是on点击事件限制，那我们就试试别的办法，" class="headerlink" title="发现又是on点击事件限制，那我们就试试别的办法，"></a>发现又是on点击事件限制，那我们就试试别的办法，</h4><h4 id="既然这两种方法都有字符过滤，那我们构想一下，我们可以对标签的书写做一些处理，让后台过滤掉任然可以执行我们的脚本，在上面的被过滤字符中都插入一段过滤字符，当插入的字符被过滤后，过滤结果任然可以组合成脚本语句"><a href="#既然这两种方法都有字符过滤，那我们构想一下，我们可以对标签的书写做一些处理，让后台过滤掉任然可以执行我们的脚本，在上面的被过滤字符中都插入一段过滤字符，当插入的字符被过滤后，过滤结果任然可以组合成脚本语句" class="headerlink" title="既然这两种方法都有字符过滤，那我们构想一下，我们可以对标签的书写做一些处理，让后台过滤掉任然可以执行我们的脚本，在上面的被过滤字符中都插入一段过滤字符，当插入的字符被过滤后，过滤结果任然可以组合成脚本语句"></a>既然这两种方法都有字符过滤，那我们构想一下，我们可以对标签的书写做一些处理，让后台过滤掉任然可以执行我们的脚本，在上面的被过滤字符中都插入一段过滤字符，当插入的字符被过滤后，过滤结果任然可以组合成脚本语句</h4><p><img src="/2020/07/01/xss-test06-07/08.png" alt></p>
+<h4 id="好的，过关。"><a href="#好的，过关。" class="headerlink" title="好的，过关。"></a>好的，过关。</h4>]]></content>
+  </entry>
+  <entry>
+    <title>xss_test04-05</title>
+    <url>/2020/06/30/xss-test04-05/</url>
+    <content><![CDATA[<h1 id="xss靶场练习"><a href="#xss靶场练习" class="headerlink" title="xss靶场练习"></a>xss靶场练习</h1><h2 id="（4）第四关"><a href="#（4）第四关" class="headerlink" title="（4）第四关"></a>（4）第四关</h2><h4 id="输入弹窗代码，发现没有效果，还把-lt-gt-过滤，查看源码，要绕过htmlsperiachars（）函数"><a href="#输入弹窗代码，发现没有效果，还把-lt-gt-过滤，查看源码，要绕过htmlsperiachars（）函数" class="headerlink" title="输入弹窗代码，发现没有效果，还把&lt;&gt;过滤，查看源码，要绕过htmlsperiachars（）函数"></a>输入弹窗代码，发现没有效果，还把&lt;&gt;过滤，查看源码，要绕过htmlsperiachars（）函数</h4><p><img src="/2020/06/30/xss-test04-05/01.png" alt></p>
+<h4 id="构想是否可以不输入-lt-gt-，并且根据inpu的标签进行js构造"><a href="#构想是否可以不输入-lt-gt-，并且根据inpu的标签进行js构造" class="headerlink" title="构想是否可以不输入&lt;&gt;，并且根据inpu的标签进行js构造"></a>构想是否可以不输入&lt;&gt;，并且根据inpu的标签进行js构造</h4><h4 id="输入payload如下："><a href="#输入payload如下：" class="headerlink" title="输入payload如下："></a>输入payload如下：</h4><p><img src="/2020/06/30/xss-test04-05/02.png" alt></p>
+<h4 id="弹窗成功"><a href="#弹窗成功" class="headerlink" title="弹窗成功"></a>弹窗成功</h4><h2 id="（5）第五关"><a href="#（5）第五关" class="headerlink" title="（5）第五关"></a>（5）第五关</h2><h4 id="直接来个上一关的payload，发现不使用on的点击事件"><a href="#直接来个上一关的payload，发现不使用on的点击事件" class="headerlink" title="直接来个上一关的payload，发现不使用on的点击事件"></a>直接来个上一关的payload，发现不使用on的点击事件</h4><p><img src="/2020/06/30/xss-test04-05/03.png" alt></p>
+<p><img src="/2020/06/30/xss-test04-05/04.png" alt></p>
+<h4 id="接着看源码，发现str-replace函数把-lt-script转换成-lt-scr-pt，这下子-lt-script就不能用了，在网上找了很久发现，大家都是利用javascript伪协议"><a href="#接着看源码，发现str-replace函数把-lt-script转换成-lt-scr-pt，这下子-lt-script就不能用了，在网上找了很久发现，大家都是利用javascript伪协议" class="headerlink" title="接着看源码，发现str_replace函数把&lt;script转换成&lt;scr_pt，这下子&lt;script就不能用了，在网上找了很久发现，大家都是利用javascript伪协议"></a>接着看源码，发现str_replace函数把&lt;script转换成&lt;scr_pt，这下子&lt;script就不能用了，在网上找了很久发现，大家都是利用javascript伪协议</h4><p><img src="/2020/06/30/xss-test04-05/05.png" alt></p>
+<h4 id="过关！！！"><a href="#过关！！！" class="headerlink" title="过关！！！"></a>过关！！！</h4>]]></content>
+  </entry>
+  <entry>
+    <title>xss_test01-03</title>
+    <url>/2020/06/30/xss-test01-03/</url>
+    <content><![CDATA[<h1 id="xss靶场练习"><a href="#xss靶场练习" class="headerlink" title="xss靶场练习"></a>xss靶场练习</h1><h2 id="（1）第一关"><a href="#（1）第一关" class="headerlink" title="（1）第一关"></a>（1）第一关</h2><p><img src="/2020/06/30/xss-test01-03/01.jpg" alt></p>
+<h4 id="查看源码，发现没什么限制的，输入弹框就弹出完成不错的弹窗，就会进入第二关"><a href="#查看源码，发现没什么限制的，输入弹框就弹出完成不错的弹窗，就会进入第二关" class="headerlink" title="查看源码，发现没什么限制的，输入弹框就弹出完成不错的弹窗，就会进入第二关"></a>查看源码，发现没什么限制的，输入弹框就弹出完成不错的弹窗，就会进入第二关</h4><p><img src="/2020/06/30/xss-test01-03/02.jpg" alt></p>
+<h2 id="（2）第二关"><a href="#（2）第二关" class="headerlink" title="（2）第二关"></a>（2）第二关</h2><h4 id="老样子，输入弹窗代码，发现没有弹窗出现"><a href="#老样子，输入弹窗代码，发现没有弹窗出现" class="headerlink" title="老样子，输入弹窗代码，发现没有弹窗出现"></a>老样子，输入弹窗代码，发现没有弹窗出现</h4><p><img src="/2020/06/30/xss-test01-03/05.png" alt></p>
+<h4 id="查看源码，发现都被转换成了html的实体编码，所以无法弹窗出来"><a href="#查看源码，发现都被转换成了html的实体编码，所以无法弹窗出来" class="headerlink" title="查看源码，发现都被转换成了html的实体编码，所以无法弹窗出来"></a>查看源码，发现都被转换成了html的实体编码，所以无法弹窗出来</h4><p><img src="/2020/06/30/xss-test01-03/06.png" alt></p>
+<h4 id="往下面看看到input那一条，后面的value等于我们刚刚输入的内容，我们可以考虑一下，吧这个标签给他闭合一下，看看是否弹窗出现，输入："><a href="#往下面看看到input那一条，后面的value等于我们刚刚输入的内容，我们可以考虑一下，吧这个标签给他闭合一下，看看是否弹窗出现，输入：" class="headerlink" title="往下面看看到input那一条，后面的value等于我们刚刚输入的内容，我们可以考虑一下，吧这个标签给他闭合一下，看看是否弹窗出现，输入："></a>往下面看看到input那一条，后面的value等于我们刚刚输入的内容，我们可以考虑一下，吧这个标签给他闭合一下，看看是否弹窗出现，输入：</h4><p><img src="/2020/06/30/xss-test01-03/07.png" alt></p>
+<h4 id="发现弹窗成功"><a href="#发现弹窗成功" class="headerlink" title="发现弹窗成功"></a>发现弹窗成功</h4><h2 id="（3）第三关"><a href="#（3）第三关" class="headerlink" title="（3）第三关"></a>（3）第三关</h2><h4 id="继续输入闭合后的弹窗，发现难度又升一级了，没有弹窗出现"><a href="#继续输入闭合后的弹窗，发现难度又升一级了，没有弹窗出现" class="headerlink" title="继续输入闭合后的弹窗，发现难度又升一级了，没有弹窗出现"></a>继续输入闭合后的弹窗，发现难度又升一级了，没有弹窗出现</h4><p><img src="/2020/06/30/xss-test01-03/08.png" alt></p>
+<h4 id="看到之后，发现“和-lt-gt-这两个符号都被转换了，所以这里我们只能使用别的方法调用alert-函数实现弹窗了"><a href="#看到之后，发现“和-lt-gt-这两个符号都被转换了，所以这里我们只能使用别的方法调用alert-函数实现弹窗了" class="headerlink" title="看到之后，发现“和&lt;&gt;这两个符号都被转换了，所以这里我们只能使用别的方法调用alert()函数实现弹窗了"></a>看到之后，发现“和&lt;&gt;这两个符号都被转换了，所以这里我们只能使用别的方法调用alert()函数实现弹窗了</h4><h4 id="查看资料之后，发现-html事件中的from表单的oninput事件"><a href="#查看资料之后，发现-html事件中的from表单的oninput事件" class="headerlink" title="查看资料之后，发现 html事件中的from表单的oninput事件"></a>查看资料之后，发现 <a href="http://www.w3school.com.cn/tags/html_ref_eventattributes.asp" target="_blank" rel="noopener">html事件</a>中的from表单的oninput事件</h4><p><img src="/2020/06/30/xss-test01-03/09.png" alt></p>
+<h4 id="还有双引号改成单引号，然后输入"><a href="#还有双引号改成单引号，然后输入" class="headerlink" title="还有双引号改成单引号，然后输入"></a>还有双引号改成单引号，然后输入</h4><p><img src="/2020/06/30/xss-test01-03/10.png" alt></p>
+<h4 id="发现，弹窗成功"><a href="#发现，弹窗成功" class="headerlink" title="发现，弹窗成功"></a>发现，弹窗成功</h4>]]></content>
+  </entry>
+  <entry>
+    <title>google基本语法</title>
+    <url>/2020/06/28/google%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="google基本语法"><a href="#google基本语法" class="headerlink" title="google基本语法"></a>google基本语法</h1><h3 id="intile-关键字"><a href="#intile-关键字" class="headerlink" title="intile:关键字"></a>intile:关键字</h3><p>​        把网页标题中某个关键字作为搜索条件，然后搜索全世界网页标题中含有这些关键字的网页，allintitle：关键字。功能相同</p>
+<h3 id="cache：关键字"><a href="#cache：关键字" class="headerlink" title="cache：关键字"></a>cache：关键字</h3><p>​        搜索含有关键字内容的cache</p>
+<h3 id="define：关键字"><a href="#define：关键字" class="headerlink" title="define：关键字"></a>define：关键字</h3><p>​        搜索关键字的定义</p>
+<h3 id="filetype：文件名-后缀名"><a href="#filetype：文件名-后缀名" class="headerlink" title="filetype：文件名.后缀名"></a>filetype：文件名.后缀名</h3><p>​        搜索特定的文件。比如搜索信息安全方面的论文，我们输入“信息安全论文 filetype：doc”就可以找到了</p>
+<h3 id="info：关键字"><a href="#info：关键字" class="headerlink" title="info：关键字"></a>info：关键字</h3><p>​        这个语法永远搜索指定站点的一些基本信息</p>
+<h3 id="inurl：关键字"><a href="#inurl：关键字" class="headerlink" title="inurl：关键字"></a>inurl：关键字</h3><p>​        搜索含有关键字的URl地址，这个语法非常重要，使用的也是最频繁，我们还可以使用allinurl来更加精准的定位URLdozho ，比如搜索含有movie的URL地址，输入“inurl:movie”即可，那么找出来的大部分是电影的网站·    </p>
+<h3 id="link：关键字"><a href="#link：关键字" class="headerlink" title="link：关键字"></a>link：关键字</h3><p>​        查找与关键字做了链接的URL地址，利用它，我们可能搜索到一些敏感信息</p>
+<h3 id="site：域名"><a href="#site：域名" class="headerlink" title="site：域名"></a>site：域名</h3><p>​        返回域名中所有的URL地址，他可以探测网站的拓扑结构进行，也是非常的重要，是用非常频繁，比如搜搜北京大学所有学院的URL地址，我们输入“学院 site:pku.edu.cn”就可以搜索到他所有的学院</p>
+<h3 id="related：URL"><a href="#related：URL" class="headerlink" title="related：URL"></a>related：URL</h3><p>​        搜索与指定URL相关的页面。比如搜索与北京大学相关的网页，我们输入关键字“related:pku.edu.cn”即可看到</p>
+<h3 id="stocks："><a href="#stocks：" class="headerlink" title="stocks："></a>stocks：</h3><p>​        搜索有关一家公司的股票市场信息</p>
+<h3 id="insubject："><a href="#insubject：" class="headerlink" title="insubject："></a>insubject：</h3><p>​        搜索Google组的标题行</p>
+<h3 id="msgid："><a href="#msgid：" class="headerlink" title="msgid："></a>msgid：</h3><p>​        搜索识别新闻组帖子的 Google组信息标识和字符串</p>
+<h3 id="group："><a href="#group：" class="headerlink" title="group："></a>group：</h3><p>​        搜索Google组搜索词汇帖的题目</p>
+<h3 id="author："><a href="#author：" class="headerlink" title="author："></a>author：</h3><p>​        搜索新闻组帖子的作者</p>
+<h3 id="bphonebook："><a href="#bphonebook：" class="headerlink" title="bphonebook："></a>bphonebook：</h3><p>​        仅搜索商业电话号码薄</p>
+<h3 id="rphonebook："><a href="#rphonebook：" class="headerlink" title="rphonebook："></a>rphonebook：</h3><p>​        仅搜索住宅电话号码簿</p>
+<h3 id="phonebook："><a href="#phonebook：" class="headerlink" title="phonebook："></a>phonebook：</h3><p>​        搜索商业或者住宅电话号码薄</p>
+<h3 id="daterange："><a href="#daterange：" class="headerlink" title="daterange："></a>daterange：</h3><p>​        搜索某个日期范围内Google做搜索引的网页</p>
+<h3 id="inanchor："><a href="#inanchor：" class="headerlink" title="inanchor："></a>inanchor：</h3><p>​        搜索一个HFML标记中的一个链接的文本表现形式</p>
+<h3 id="不过需要记住以下几点："><a href="#不过需要记住以下几点：" class="headerlink" title="不过需要记住以下几点："></a>不过需要记住以下几点：</h3><p><strong>google</strong>搜索多个关键字时之间用间隔，空格表示逻辑与操作</p>
+<p><strong>google</strong>中OR表示逻辑或。如AORB表示含有A的网页B的网页和同时含A和B的网页。</p>
+<p><strong>google</strong>中精确搜索引用双引号，比如我们搜索脚本黑客和“脚本黑客”，两者之间ode差别就是一个            双引号，显示了他们搜索结果的差别</p>
+<p><strong>google</strong>中的通配符。*表示一连串字符，？代表单个字符。含有通配符的关键字要用引号。</p>
+<p><strong>google</strong>对英文关键字的大小写不敏感</p>
+<p><strong>google</strong>对出现频繁极高的英文单词做忽略处理，如：.com i www http 等。如果要对忽略的关键字            进行强制搜索，则需要在该关键字前上加明文的“+”号</p>
+<p><strong>google</strong>大部分常用英文符号（如问号，句号，逗号等）无法成为搜索关键字，加强制也不行。还有            一点就是，可能大家都知道BAIDU的网页快照，其实Google也有这个功能的，他的URL地址            是<a href="http://www.googlesyndicatedsearch.com/u/berkeley" target="_blank" rel="noopener">http://www.googlesyndicatedsearch.com/u/berkeley</a> 比如我们要快照北京大学，那么输入北京大学（pku.edu.cn）的网址就可以了</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top10</title>
+    <url>/2020/06/28/top10/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之十"><a href="#OWASP-top10之十" class="headerlink" title="OWASP top10之十"></a>OWASP top10之十</h1><h2 id="10，未验证的重定向和转发"><a href="#10，未验证的重定向和转发" class="headerlink" title="10，未验证的重定向和转发"></a>10，未验证的重定向和转发</h2><h3 id="重定向和转发的概念"><a href="#重定向和转发的概念" class="headerlink" title="重定向和转发的概念"></a>重定向和转发的概念</h3><p>在我们实际上网过程中，会浏览多个网页，进行多次跳转，将一个域名引导到另一个域名有两种方式重定向和转发，转发采用隐蔽路径的方式，而重定向采用不隐蔽路劲的方式</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>重定向是服务器根据逻辑，发送一个状态码（通常为3xx），告诉浏览器重新去请求那个地址，所以地址栏显示的是新的URL。（重定向是在客户端完成的）</p>
+<h3 id="转发"><a href="#转发" class="headerlink" title="转发"></a>转发</h3><p>转发是在服务器内部将请求转发给另一个资源，把那个URL的响应内容读取过来，然后把这些内容再发给浏览器，浏览器根本不知道服务器发送的内容从哪里来的，因为这个跳转过程是在服务器实现的，并不是在客户端实现的所以客户端并不知道这个跳转动作，所以他的地址还是原来的地址。（转发是在服务器端完成的）</p>
+<h3 id="两者的区别"><a href="#两者的区别" class="headerlink" title="两者的区别"></a>两者的区别</h3><p>1，重定向是在浏览器向服务器发送一个请求并收到响应后再次向一个新地址发出请求，转发是服务器收到请求后为了完成响应跳转到一个新的地址</p>
+<p>2，重定向有两次请求，不共享数据，转发是有一次请求且共享数据</p>
+<p>3，重定向后地址栏会发生变化，转发不会</p>
+<p>4，重定向的地址可以是任意地址，转发的二地址只能是当前应用类的某一个地址</p>
+<h3 id="重定向的几种方式"><a href="#重定向的几种方式" class="headerlink" title="重定向的几种方式"></a>重定向的几种方式</h3><p>1，手工重定向</p>
+<p>​        点击herf链接来跳转到新页面</p>
+<p>2，响应状态码重定向（location表示重定向后网页）</p>
+<p>​        301永久重定向（网站在响应的location）</p>
+<p>​        302临时重定向、</p>
+<p>3，服务器端重定向</p>
+<p>​        修改wed服务器配置文件或脚本来实现重定向</p>
+<p>4，meta refresh</p>
+<p>​        利用HTTP的refresh标签或者响应头refresh属性来设置</p>
+<p>5，客户端跳转</p>
+<p>​        利用rul参数重定向，控制不严可能会导致用户访问恶意网站</p>
+<h3 id="未验证的重定向和转发"><a href="#未验证的重定向和转发" class="headerlink" title="未验证的重定向和转发"></a>未验证的重定向和转发</h3><p>下面介绍一下影响危害</p>
+<p>在wed应用中，重定向和转发可以使我们愉快的浏览网页 ，那么这个漏洞是怎么来的呢？？重点就是没有对带有用户输入参数的目的url做验证，而这个时候攻击者就可以引导用户访问他们所要用户访问的站点。这个额漏洞最常见的就是钓鱼网站的使用。</p>
+<p>比如。<a href="http://www.baidu.com/sss.php?target=http://diaoyu.com">http://www.baidu.com/sss.php?target=http://diaoyu.com</a> 攻击者把这个钓鱼连接发给受害者，那么安全检测的软件就判断这个链接来自百度，是可信任的站点。但是受害者点击后则会跳转到钓鱼网站或者其他欺骗木马之类的站点等</p>
+<p>此外还有获取信息，访问恶意网站，随意 跳转，安装恶意软件等</p>
+<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><p>1，抓包工抓包，抓到302的url，修改看能否正常跳转</p>
+<p>2，浏览代码，看代码中含有重定向和转发的内容，看目的url中是否含有用户输入的参数</p>
+<p>3，点击操作网站，观察在重定向之前用户输入的参数有没有出现在某一个URL或者很多URL中</p>
+<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><p>重定向外部网站需要验证是否在白名单，转发内部网站要验证是否有权限，有权限才转发</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top09</title>
+    <url>/2020/06/28/top09/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之九"><a href="#OWASP-top10之九" class="headerlink" title="OWASP top10之九"></a>OWASP top10之九</h1><h2 id="9-使用含有已知漏洞组件"><a href="#9-使用含有已知漏洞组件" class="headerlink" title="9,使用含有已知漏洞组件"></a>9,使用含有已知漏洞组件</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>大多数的开发团队并不会把及时更新组件和库当成他们的工作重心，更不关心组件和库的版本，然而应用程序使用带有已知漏洞的组件会破坏应用程序防御系统，可能导致严重的数据丢失或服务器接管。</p>
+<h3 id="防范"><a href="#防范" class="headerlink" title="防范"></a>防范</h3><p>1，标识正在使用的所有组件和版本，包括所有依赖项</p>
+<p>2，及时关注这些组件的安全信息并保证他们是最新的</p>
+<p>3，建立使用组件的安全策略，禁止使用未经安全评估的组件</p>
+<p>4，在适当情况下，对组件进行安全封装，精装不必要的功能，封装易受攻击的部分</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top08</title>
+    <url>/2020/06/27/top08/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之八"><a href="#OWASP-top10之八" class="headerlink" title="OWASP top10之八"></a>OWASP top10之八</h1><h2 id="8，跨站请求伪造CSRF"><a href="#8，跨站请求伪造CSRF" class="headerlink" title="8，跨站请求伪造CSRF"></a>8，跨站请求伪造CSRF</h2><h3 id="csrf攻击的原理和过程"><a href="#csrf攻击的原理和过程" class="headerlink" title="csrf攻击的原理和过程"></a>csrf攻击的原理和过程</h3><p>CSRF利用用户正常登陆产生的cookie，在用户还在保持登陆状态是，访问了电鱼网站传给用户发送一张有内容的表单和含有攻击性的代码，前端利用技术是可以发送请求的，并挟持了用户的正常的cookies访问正常网站，达到伪造的表单通过用之手传到网站上的目的，为了避免用户提交其网站生成的表单，网站在用户登录时签发给用户csrfoken，该token不存放在cookie中（存放在浏览器的local storage中），由网站前端js调用（识别），在提交表单时需要携带该token从而验证该表单来自本网站（服务器的token验证数据存放在session中）</p>
+<h3 id="crsf分类"><a href="#crsf分类" class="headerlink" title="crsf分类"></a>crsf分类</h3><h4 id="GET型"><a href="#GET型" class="headerlink" title="GET型"></a>GET型</h4><p>如果一个网站某个地方的功能。比如用户修改邮箱是通过GET请求进行修改的</p>
+<p>如：/user.php?id=1&amp;email=123@163.com, 这个链接的意思是用户id=1将邮箱修改为</p>
+<p><a href="mailto:123@163.com">123@163.com</a>。当我们把这个链接修改为/user.php?id=1&amp;email=abc@163.com，然后通过各种手段发送给被攻击者，诱惑被攻击者点击我们的链接，当用户刚好访问这个网站，他同时又点击了这个链接，那么悲剧发生了。这个用户的邮箱被改为<a href="mailto:abc@163.com">abc@163.com</a>了</p>
+<h4 id="POST型"><a href="#POST型" class="headerlink" title="POST型"></a>POST型</h4><p>在普通用户的眼中，点击网页—&gt;打开 试看视频—&gt;购买视频是一个很正常的一个流程。可是攻击者的眼中可以算正常，但又不正常的，当然不正常的情况下，是在开发者安全意识不足所造成的，攻击者在购买处抓到购买时候网站处理购买（扣除）用户余额的地址，比如：/course/user/handler/25332/buy.php。通过提交表单，buy.php处理购买的信息，这里的25532为视频ID，那么攻击者现在构造一个链接，链接中包含以下内容。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">/coures/user/handler/25332/buy</span> <span class="attr">method</span>=<span class="string">POST</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"xx"</span> <span class="attr">value</span>=<span class="string">"xx"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"> <span class="built_in">document</span>.forms[<span class="number">0</span>].submit();</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当用户访问该页面后，表单会自动提交，相当于模拟用户完成了一次POST操作，自动购买了id为25332的是哦，从而导致受害者余额扣除</p>
+<h3 id="CSRF漏洞挖掘"><a href="#CSRF漏洞挖掘" class="headerlink" title="CSRF漏洞挖掘"></a>CSRF漏洞挖掘</h3><p>1，抓取一个正常请求的数据包，如果没有Referere字段和token，那么极有可能存在CSRF漏洞</p>
+<p>2，如果Referer字段，但是去掉Referer字段后在重新提交，如果该提交还有效，那么基本上可以确定存在CSRF漏洞。</p>
+<p>3，利用工具进行CSRF检测。如CSRFTESTER，CSRF REQUEST BUILDER等</p>
+<h3 id="防御手段"><a href="#防御手段" class="headerlink" title="防御手段"></a>防御手段</h3><p>1，验证http referer中记录的请求来源地址是否是合法用户地址（即最开始登录的来源地址）。但这只能进行简单的防御，因为这个地址可以认为的篡改</p>
+<p>2，重要功能点使用动态验证码进行CSRF防护</p>
+<p>3，通过token方式进行CSRF防护，在服务器端对比POST提交参数的token与Session中绑定的token是否一致，以验证CSRF攻击</p>
+<p>4，在Session中绑定token，如果不能保存到服务器端Session中，则可以替代为保存到cookie里</p>
+<p>5，在form表单中自动token字段，比如&lt;input type=hidden name=”anti_csrf_token”</p>
+<p>value=$token””&gt;</p>
+<p>6，在 HTTP请求中自动添加token</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top07</title>
+    <url>/2020/06/26/top07/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之七"><a href="#OWASP-top10之七" class="headerlink" title="OWASP top10之七"></a>OWASP top10之七</h1><h2 id="7，缺少功能级的访问控制"><a href="#7，缺少功能级的访问控制" class="headerlink" title="7，缺少功能级的访问控制"></a>7，缺少功能级的访问控制</h2><h3 id="概念原理"><a href="#概念原理" class="headerlink" title="概念原理"></a>概念原理</h3><p>大多数wed应用程序的功能在UI页面之前，会验证功能级别的访问权限，但是，应用程式需要在每个功能被访问时在服务器端执行相同的访问控制检查。如果请求没有被验证，攻击者能够伪造请求从而在未经适当授权时访问功能</p>
+<p>a：合法用户是否能够正常登录，需要测试</p>
+<p>b：匿名或者攻击者等没有权限的用户是否会被拒绝登录，并且不能访问到需要登录之后才能访问到的页面</p>
+<h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><p>1，保证合法授权用户可以访问成功</p>
+<p>2，限制非法未授权用户的访问</p>
+<h3 id="后果危害"><a href="#后果危害" class="headerlink" title="后果危害"></a>后果危害</h3><p>很多系统的权限控制是通过页面或隐藏URL实现的，没有在服务器端进行身份确认和权限验证，导致攻击者通过修改页面样式或获取隐藏URL，进而获取特权页面来对系统进行攻击，或者在匿名状态下对他人的页面进行攻击从而获取用户数据或提升权限</p>
+<p>如果是发生在后台，攻击者能够访问到正常用户才能访问到的页面，将对所有用户的安全问题造成威胁。、</p>
+<p>防御措施</p>
+<p>1，设计严格的权限控制系统，对于每个请求和URL都要进行校验和权限确认，防止非法请求被执行</p>
+<p>2，对于每个功能的访问，都要有明确的角色授权，采 用过滤器的方式校验每个请求的合法性</p>
+<p>3，实现wed访问的ip白名单列表，禁止不可信的ip访问wed系统</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top06</title>
+    <url>/2020/06/25/top06/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之六"><a href="#OWASP-top10之六" class="headerlink" title="OWASP top10之六"></a>OWASP top10之六</h1><h2 id="6，敏感信息泄露"><a href="#6，敏感信息泄露" class="headerlink" title="6，敏感信息泄露"></a>6，敏感信息泄露</h2><h3 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a>漏洞描述</h3><p>由于管理员或者技术人员等各种原因导致敏感信息泄露，许多wed应用程序和api都无法正确保护敏感数据，攻击者可以通过窃取或修改未加密的数据来实施信用卡诈骗，身份盗窃或其他犯罪行为，未加密的敏感数据容易受到破坏，因此，我们需要对敏感数据加密，这些数据包括：传输过程中的数据，存储的数据以及浏览器的交互数据</p>
+<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><p>1，手工挖掘，查看wed容器或网页源码代码，可能存在敏感信息。比如访问url下的目录，直接列出了目录下的文件列表，错误的报错信息包含了网站的信息</p>
+<p>2，工具挖掘，像爬虫之类的工具可以扫描到敏感文件路径，从而找到敏感数据</p>
+<h3 id="防范措施"><a href="#防范措施" class="headerlink" title="防范措施"></a>防范措施</h3><p>1，对系统处理，存储或传输的数据进行分类，根据分类进行访问控制。</p>
+<p>2，对用户敏感信息的传输和存储进行加密</p>
+<p>3，强化安全意识</p>
+<h3 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h3><p>1，应根据业务特点定义出系统存储的敏感信息</p>
+<p>2，敏感信息在存储，传输，显示时应进行安全处理，可采用的处理方式为加密或脱敏</p>
+<p>3，敏感信息不应使用GET方式提交服务器</p>
+<p>4，用户密码为最高级别的敏感信息，在存储，传输，显示时都必须加密</p>
+<p>5，需要选择可靠的加密算法，优先选择不对称算法，不得使用BASE64等编码进行 “ 加密 ”</p>
+<p>6，对于一些系统默认报错页面应重新进行设计自定义报错页面，以免暴露系统敏感信息</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top05</title>
+    <url>/2020/06/23/top05/</url>
+    <content><![CDATA[<h1 id="OWASP-top10之五"><a href="#OWASP-top10之五" class="headerlink" title="OWASP top10之五"></a>OWASP top10之五</h1><h2 id="5，安全配置错误"><a href="#5，安全配置错误" class="headerlink" title="5，安全配置错误"></a>5，安全配置错误</h2><h3 id="一，漏洞描述"><a href="#一，漏洞描述" class="headerlink" title="一，漏洞描述"></a>一，漏洞描述</h3><p><strong>定义：</strong>安全配置错误可以发生在一个应用程序堆栈的任何层面，包括网络服务，平台，wed服务器，应用服务器，数据库，框架，自定义的代码，预安全的虚拟机，容器，存储等，这通常是由于不安全的默认配置，不完整的临时配置，开源云存储，错误的HTTP标头配置以及包含敏感信息的纤细错误信息所造成的</p>
+<p>安全配置错误是最常见的安全问题，这通常由于不安全的默认配置，不完整的临时配置，开源云存储，错误的HTTP标头配置以及包含敏感信息的详细错误信息所造成的</p>
+<h3 id="二，漏洞影响："><a href="#二，漏洞影响：" class="headerlink" title="二，漏洞影响："></a>二，漏洞影响：</h3><p>攻击者能够通过未修复的漏洞，访问默认账户，不再使用的页面，未保护的文件和目录等来取得对系统的未授权的访问或了解</p>
+<h3 id="检测场景"><a href="#检测场景" class="headerlink" title="检测场景"></a>检测场景</h3><p>1，应用程序启用或者安装了不必要的安全功能</p>
+<p>2，默认账户名和密码没有修改</p>
+<p>3，应用软件已过期或易受攻击</p>
+<p>4，应用程序服务器，应用程序框架等未进行安全配置</p>
+<p>5，错误处理机制披露大量敏感信息</p>
+<p>6，对于更新的系统，禁用或不安全地配置安全功能</p>
+<h3 id="防御措施"><a href="#防御措施" class="headerlink" title="防御措施"></a>防御措施</h3><p>1，配置所有的额安全机制</p>
+<p>2，最小原则，关掉或限制不使用的服务</p>
+<p>3，更改默认账户信息</p>
+<p>4，使用日志和警报</p>
+<p>5，回显信息不显示任何与实际错误相关的信息</p>
+<p>7，检查和修复安全配置项</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top04</title>
+    <url>/2020/06/22/top04/</url>
+    <content><![CDATA[<h1 id="OWASP-TOP10之四"><a href="#OWASP-TOP10之四" class="headerlink" title="OWASP TOP10之四"></a>OWASP TOP10之四</h1><hr>
+<h1 id="4，不安全的直接对象引用"><a href="#4，不安全的直接对象引用" class="headerlink" title="4，不安全的直接对象引用"></a>4，不安全的直接对象引用</h1><h2 id="一，不安全的直接对象引用的概念"><a href="#一，不安全的直接对象引用的概念" class="headerlink" title="一，不安全的直接对象引用的概念"></a>一，不安全的直接对象引用的概念</h2><p>不安全的对象直接引用，指一个授权的用户，通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</p>
+<h2 id="二，不安全的直接对象引用出现的原因"><a href="#二，不安全的直接对象引用出现的原因" class="headerlink" title="二，不安全的直接对象引用出现的原因"></a>二，不安全的直接对象引用出现的原因</h2><p>1，wed应用往往在生成wed页面时会用它的真实名字且并不会对所有的目标对象访问时来排查用户权限，所以这就造成了不安全的对象直接引用的漏洞</p>
+<p>2，服务器上的具体文件名，路径或数据库关键早等内部资源暴露在URL或网友中，攻击者可以尝试直接访问替他资源</p>
+<h2 id="三，如何防范"><a href="#三，如何防范" class="headerlink" title="三，如何防范"></a>三，如何防范</h2><p>1，使用基于用户或会话的间接对象访问，这样可防止攻击者直接攻击未授权资源</p>
+<p>2，访问检查：对任何来自不信源所使用的所有对象进行访问控制检查</p>
+<p>3，避免在url或网页中直接引用内部文件名或数据库关键字</p>
+<p>4，验证用户输入和url请求，拒绝包含./ …/的请求</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top03</title>
+    <url>/2020/06/21/top03/</url>
+    <content><![CDATA[<h1 id="OWASP-TOP10之三"><a href="#OWASP-TOP10之三" class="headerlink" title="OWASP TOP10之三"></a>OWASP TOP10之三</h1><hr>
+<h1 id="3、XSS攻击"><a href="#3、XSS攻击" class="headerlink" title="3、XSS攻击"></a>3、XSS攻击</h1><h3 id="原理："><a href="#原理：" class="headerlink" title="原理："></a>原理：</h3><p>是一种网站应用程序的安全漏洞攻击模式代码注入的一种，它允许恶意用户将代码注入到网页上，其他用户在观看网页时就会受到影响。这类攻击通常包含了HTML以及用户端脚本语言</p>
+<p>xss攻击的主要目的则是，想办法获取攻击网站的cookie，因此又来cookie相当于有了seesion，又来这些信息就可以在任意能够进互联网的pc登录该网站，并以其他人的身份登录，做一些破坏。</p>
+<p>xss攻击是wed攻击中最常见的攻击方法之一，它是通过对网页注入可执行代码且成功地被浏览器执行，达到攻击的目的，形成了一次有效xss攻击，他可以获取用户的练习人列表，然后向联系人发送虚假诈骗信息，可以删除用户的日志等等，有时候还和其他攻击方式同时实施比如SQL注入攻击服务器和数据库，Click劫持，相对链接劫持等钓鱼，他带来的危害巨大，是wed安全的头号大敌                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </p>
+<h4 id="xss攻击分为三种：基于反射的xss攻击，基于存储的xss攻击和基于DOM或本地的xss攻击"><a href="#xss攻击分为三种：基于反射的xss攻击，基于存储的xss攻击和基于DOM或本地的xss攻击" class="headerlink" title="xss攻击分为三种：基于反射的xss攻击，基于存储的xss攻击和基于DOM或本地的xss攻击"></a>xss攻击分为三种：基于反射的xss攻击，基于存储的xss攻击和基于DOM或本地的xss攻击</h4><h2 id="攻击条件"><a href="#攻击条件" class="headerlink" title="*攻击条件                                                                                                                 *"></a>*<em>攻击条件                                                                                                                 *</em></h2><p>一，需要向wed页面注入恶意代码</p>
+<p>二，这些恶意代码能够被浏览器成功的执行</p>
+<h2 id="防御措施"><a href="#防御措施" class="headerlink" title="防御措施"></a>防御措施</h2><p>1，当恶意代码值被作为一标签的内容显示：在不需要html输入的地方对html标签及一些特殊字符（‘ ; + “ &lt;&gt; &amp; 等等）做过滤，将其转化为不被浏览器解释执行的字符</p>
+<p>2，当恶意代码被作为某一标签的属性显示，通过用将属性截断来开辟新的属性或恶意方法：属性本身存在的单引号和双引号都需要进行转码；对用户输入的html标签及标签属性做白名单过滤，也可以对一些存在漏洞的标签和属性进行专门过滤                                                 </p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top02</title>
+    <url>/2020/06/20/top02/</url>
+    <content><![CDATA[<h1 id="OWASP-TOP10之二"><a href="#OWASP-TOP10之二" class="headerlink" title="OWASP TOP10之二"></a>OWASP TOP10之二</h1><h2 id="2、身份认证和会话管理"><a href="#2、身份认证和会话管理" class="headerlink" title="2、身份认证和会话管理"></a>2、<strong>身份认证和会话管理</strong></h2><p><strong>身份认证：</strong>身份认证最常用于系统管理登录，形式一般为用户和密码登录方式，在安全性要求较高的情况下，还有验证码，客户端证书，Ukey等</p>
+<p><strong>会话管理：</strong>HTTP本身是无状态的，利用会话管理机制来实现连接识别。身份认证的结果往往是获得一个令牌，通常放在cookie中，之后对用户身份的识别根据这个授权的令牌进行识别，而不需要每次都要登陆。</p>
+<h2 id="失效的身份认证和会话管理"><a href="#失效的身份认证和会话管理" class="headerlink" title="失效的身份认证和会话管理"></a><strong>失效的身份认证和会话管理</strong></h2><p>那么什么事失效的身份认证和会话管理呢？从原理上来解释一下。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a><strong>原理</strong></h2><p>与认证和会话管理相关的应用程序功能往往得不到正确实施，导致了攻击者可以破坏密码，密钥，会话令牌或实施漏洞冒充其他用户身份</p>
+<h2 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h2><p>由于存在以上的漏洞，恶意用户可能会窃取或操纵用户会话和cookie，进而模仿合法用户</p>
+<h2 id="如何判断"><a href="#如何判断" class="headerlink" title="如何判断"></a>如何判断</h2><p>1，用户身份验证凭证没有使用哈希或加密保护</p>
+<p>2，认证凭证可猜测，或者能够通过薄弱的账户管理功能（例如账户创建，密码修改，密码恢复，弱会话ID）重写。</p>
+<p>3，会话ID暴露在URL里（例如URL重写）</p>
+<p>4，会话ID容易受到会话固定（session fixation）的攻击</p>
+<p>5，会话ID没有超时限制，或者用户会话或身份验证令牌特别是单点登录令牌在用户注销时没有失效</p>
+<p>6，成功注册后没回话ID没有轮转</p>
+<p>7，密码，会话ID和其他认证凭据使用未加密连接传输</p>
+<h2 id="如何防范"><a href="#如何防范" class="headerlink" title="如何防范"></a>如何防范</h2><p>1，区分公共区域和受限区域</p>
+<p>2，对最终用户账号使用账户锁定策略</p>
+<p>3，支持密码有效期</p>
+<p>4，能够禁用账户</p>
+<p>5，不要存储用户密码</p>
+<p>6，要求使用强密码</p>
+<p>7，不要在网络上以纯文本形式发送密码</p>
+<p>8，保护身份验证Cookie</p>
+<p>9，使用SSl保护会话身份验证Cookie</p>
+<p>10，对身份验证Cookie的内容进行加密</p>
+<p>11，限制会话寿命</p>
+<p>12，避免未经授权访问会话状态</p>
+<h2 id="修复方案"><a href="#修复方案" class="headerlink" title="修复方案"></a>修复方案</h2><p>1，使用内置的会话管理功能</p>
+<p>2，通过认证的问候</p>
+<p>3，使用单一的入口点</p>
+<p>4，确保在一开始登录SSL保护的网页</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>top01</title>
+    <url>/2020/06/20/top01/</url>
+    <content><![CDATA[<h1 id="OWASP-TOP10之一"><a href="#OWASP-TOP10之一" class="headerlink" title="OWASP TOP10之一"></a>OWASP TOP10之一</h1><h2 id="1、sql注入"><a href="#1、sql注入" class="headerlink" title="1、sql注入"></a>1、sql注入</h2><h3 id="一，SQL注入的原理和修复"><a href="#一，SQL注入的原理和修复" class="headerlink" title="一，SQL注入的原理和修复"></a><strong>一，SQL注入的原理和修复</strong></h3><p>sql注入就是指wed应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询，攻击者可以通过构造恶意的sql语句来实现对数据库的任意操作</p>
+<p><strong>sql注入的原理：</strong>通过sql命令插入到wed表单提交活输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的sql命令，具体说，他是利用应用程序，将恶意的sql命令注入到后台数据库引擎的能力，他可以通过wed表单中输入恶意sql语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行sql语句。造成sql注入漏洞的原因有两个：一个是没有对输入的数据进行过滤（过滤输入），还有一个是没有对发送到数据库的 数据进行转义（转义输出）。</p>
+<p><strong>修复方案：</strong>1，建议在代码中对数字类型的参数进行数字转换，然后在带入到sql查询语句中，这样任何注入行为都不能成功。2，考虑过滤一些参数，比如get参数和post参数中对于sql语言查询的部分。3，对用户的输入进行检查，特别是一些特殊字符，比如，双引号，分号，逗号，冒号，连接号等进行转换或者过滤</p>
+<h2 id="二，关于数据库"><a href="#二，关于数据库" class="headerlink" title="二，关于数据库"></a><strong>二，关于数据库</strong></h2><p>MySQL5.0版本后，MySQL默认在数据库中存放一个information_schema的数据库，在该库中，我们需要记住三个表名，分别是schemata，tables，columns。</p>
+<p>a）Schemata表存储的是该用户创建的所有数据库的库名，需要记住该表中记录数据库名的字段名为schema_name。</p>
+<p>b）Tables表存储改用户创建的所有数据库的库名，表名，要记住该表中记录数据库库名和表名的字段分别是table_schema和table_name.</p>
+<p>c）Columns表存储该用户创建的所有数据库的库名表名，字段名，要记住该表中记录数据库库名，表名，字段名table_schema，table_name，columns_name。</p>
+<h2 id="三，sql注入的类型介绍"><a href="#三，sql注入的类型介绍" class="headerlink" title="三，sql注入的类型介绍"></a><strong>三，sql注入的类型介绍</strong></h2><p><strong>按照注入点类型来分类</strong></p>
+<p>（1）数字型注入点</p>
+<p>类似结构<a href="http://xxxxxx.com/users.php?id=1" target="_blank" rel="noopener">http://xxxxxx.com/users.php?id=1</a> 基于这种形式的注入，一般被称为数字型注入点，基于是其注入点id类型为数字，在大多数的网页里面，如查看用户个人信息，查看文章等，大都会使用这种形式的结构传递id等信息，交给后端，查询出数据库中对应的信息，返回前台。这一类的sql语句圆形大概为select * from 表名 where id=1 若存在注入，我们可以构造类似与如下的sql注入语句进行爆破：</p>
+<p>​              <strong>select * from 表名 where id=1 and 1=1</strong></p>
+<p>（2）字符型注入点</p>
+<p>类似结构<a href="http://xxx.com/users.php?name=admin" target="_blank" rel="noopener">http://xxx.com/users.php?name=admin</a> 这种形式的，其注入点name类型为字符型，所以叫字符型注入点。这一类的sql语句原型大概为select * from 表名 where name= ‘admin’ 相对比数字型注入类型的sql语句原型多了引号，可以是单引号或者是双引号。若存在注入，我们可以构造出类似与如下的sql注入语句进行爆破：</p>
+<p>​          <strong>select *from 表名 where name=‘admin’ and 1=1 ‘</strong></p>
+<p><strong>按照数据提交的方式来分类</strong></p>
+<p>（1）GET注入</p>
+<p>提交数据的方式是GET，注入点的位置在GET参数部分。比如有这样的一个链接http:xxx.com/news.php?id=1，id是注入点</p>
+<p>（2）POST注入</p>
+<p>使用POST方式提交数据，注入点位置在POST数据部分，常发生在表单中。</p>
+<p>（3）Cookie注入</p>
+<p>HTTP请求的时候会带上客户端的Cookie，注入点存在Cookie当中的额某个字段中</p>
+<p>（4）HTTP头部注入</p>
+<p>注入点在HTTP请求头部的某个字段中。比如存在User-Agent字段中。严格讲的话，Cookie其实应该也是算头部注入的一种形式，因为在HTTP请求的是后，Cookie是头部的一个字段。</p>
+<p><strong>按照执行效果来分类</strong></p>
+<p>（1）基于布尔的盲注</p>
+<p>根据返回页面判断条件真假的注入</p>
+<p>（2)基于时间的盲注</p>
+<p>不可以根据页面返回内容判断任何信息。用条件语句查看时间延迟语句是否执行（也就是页面返回时间是否增加）来判断</p>
+<p>（3）基于报错注入</p>
+<p>页面会返回错误信息，或者把注入的语句的结果直接返回在页面中</p>
+<p>单引号</p>
+<p>双引号</p>
+<p>基于数字型注入</p>
+<p>（4）联合查询注入</p>
+<p>可以使用union的情况下的注入</p>
+<p>（5）堆查询注入</p>
+<p>可以同时执行多条语句的执行时的注入</p>
+<p>（6）宽字节注入</p>
+<p>宽字节注入主要是缘于程序员设置数据库编码与php编码为不同的两个编码，这样就可能会产生宽字节注入。</p>
+<h2 id="四，sql漏洞探测方法"><a href="#四，sql漏洞探测方法" class="headerlink" title="四，sql漏洞探测方法"></a><strong>四，sql漏洞探测方法</strong></h2><p>sql注入一般存在于如：<a href="http://xxx.xxx.xxx/abc.asp?id=XX" target="_blank" rel="noopener">http://xxx.xxx.xxx/abc.asp?id=XX</a> 等带有参数的ASP动态网页中，有时一个动态网页可能只有一个参数，有时可能有N个参数，有时是整型参数，有时是字符串型参数，不能一概而论。总之只要是带有参数的动态网页并且该网页访问了数据库，那么就有可能存在sql注入</p>
+<p>1，先加入单引号 ‘ 、双引号 “、看看是否报错，如果报错就可能存在sql注入漏洞了。</p>
+<p>2，在URL后面加入and 1=1、and 1=2 看页面是否都显示一样，显示不一样的话，就肯定存在sql注入漏洞</p>
+]]></content>
+  </entry>
+</search>
