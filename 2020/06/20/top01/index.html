@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="往后余生,OWASP TOP10之一1、sql注入一，SQL注入的原理和修复sql注入就是指wed应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询,"> 
+    <meta name="description" content="往后余生,OWASP TOP10之一1、sql注入一，SQL注入的原理和修复sql注入就是指web应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询,"> 
     <meta name="author" content="小树"> 
     <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -62,8 +62,8 @@
 
         </div>
         <div class="content markdown">
-            <h1 id="OWASP-TOP10之一"><a href="#OWASP-TOP10之一" class="headerlink" title="OWASP TOP10之一"></a>OWASP TOP10之一</h1><h2 id="1、sql注入"><a href="#1、sql注入" class="headerlink" title="1、sql注入"></a>1、sql注入</h2><h3 id="一，SQL注入的原理和修复"><a href="#一，SQL注入的原理和修复" class="headerlink" title="一，SQL注入的原理和修复"></a><strong>一，SQL注入的原理和修复</strong></h3><p>sql注入就是指wed应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询，攻击者可以通过构造恶意的sql语句来实现对数据库的任意操作</p>
-<p><strong>sql注入的原理：</strong>通过sql命令插入到wed表单提交活输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的sql命令，具体说，他是利用应用程序，将恶意的sql命令注入到后台数据库引擎的能力，他可以通过wed表单中输入恶意sql语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行sql语句。造成sql注入漏洞的原因有两个：一个是没有对输入的数据进行过滤（过滤输入），还有一个是没有对发送到数据库的 数据进行转义（转义输出）。</p>
+            <h1 id="OWASP-TOP10之一"><a href="#OWASP-TOP10之一" class="headerlink" title="OWASP TOP10之一"></a>OWASP TOP10之一</h1><h2 id="1、sql注入"><a href="#1、sql注入" class="headerlink" title="1、sql注入"></a>1、sql注入</h2><h3 id="一，SQL注入的原理和修复"><a href="#一，SQL注入的原理和修复" class="headerlink" title="一，SQL注入的原理和修复"></a><strong>一，SQL注入的原理和修复</strong></h3><p>sql注入就是指web应用程序对用户输入的数据合法性没有进行过滤或者判断，前端传入的参数是攻击者可以控制的并且参数代带入数据库的查询，攻击者可以通过构造恶意的sql语句来实现对数据库的任意操作</p>
+<p><strong>sql注入的原理：</strong>通过sql命令插入到web表单提交活输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的sql命令，具体说，他是利用应用程序，将恶意的sql命令注入到后台数据库引擎的能力，他可以通过web表单中输入恶意sql语句得到一个存在安全漏洞的网站上的数据库，而不是按照设计者意图去执行sql语句。造成sql注入漏洞的原因有两个：一个是没有对输入的数据进行过滤（过滤输入），还有一个是没有对发送到数据库的 数据进行转义（转义输出）。</p>
 <p><strong>修复方案：</strong>1，建议在代码中对数字类型的参数进行数字转换，然后在带入到sql查询语句中，这样任何注入行为都不能成功。2，考虑过滤一些参数，比如get参数和post参数中对于sql语言查询的部分。3，对用户的输入进行检查，特别是一些特殊字符，比如，双引号，分号，逗号，冒号，连接号等进行转换或者过滤</p>
 <h2 id="二，关于数据库"><a href="#二，关于数据库" class="headerlink" title="二，关于数据库"></a><strong>二，关于数据库</strong></h2><p>MySQL5.0版本后，MySQL默认在数据库中存放一个information_schema的数据库，在该库中，我们需要记住三个表名，分别是schemata，tables，columns。</p>
 <p>a）Schemata表存储的是该用户创建的所有数据库的库名，需要记住该表中记录数据库名的字段名为schema_name。</p>

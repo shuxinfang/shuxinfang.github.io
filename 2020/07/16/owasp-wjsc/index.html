@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="往后余生,wed渗透至文件上传漏洞总结概述：​        文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过脚本文件获得了执行服务器端命令的能力。常见场景是wed服务器允许上传图片或者普通文本保存，而,"> 
+    <meta name="description" content="往后余生,web渗透至文件上传漏洞总结概述：​        文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过脚本文件获得了执行服务器端命令的能力。常见场景是web服务器允许上传图片或者普通文本保存，而,"> 
     <meta name="author" content="小树"> 
     <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -62,7 +62,7 @@
 
         </div>
         <div class="content markdown">
-            <h1 id="wed渗透至文件上传漏洞总结"><a href="#wed渗透至文件上传漏洞总结" class="headerlink" title="wed渗透至文件上传漏洞总结"></a>wed渗透至文件上传漏洞总结</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><p>​        文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过脚本文件获得了执行服务器端命令的能力。常见场景是wed服务器允许上传图片或者普通文本保存，而用户绕过上传机制上上传恶意代码并执行从而控制服务器，显然这种漏洞是getshell最快最直接的方法之一，需要说明的是上传文件操作本身是没有问题的，问题在于文件上传到服务器后，服务器怎处理和解释文件</p>
+            <h1 id="web渗透至文件上传漏洞总结"><a href="#web渗透至文件上传漏洞总结" class="headerlink" title="web渗透至文件上传漏洞总结"></a>web渗透至文件上传漏洞总结</h1><h2 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h2><p>​        文件上传漏洞是指用户上传了一个可执行的脚本文件，并通过脚本文件获得了执行服务器端命令的能力。常见场景是web服务器允许上传图片或者普通文本保存，而用户绕过上传机制上上传恶意代码并执行从而控制服务器，显然这种漏洞是getshell最快最直接的方法之一，需要说明的是上传文件操作本身是没有问题的，问题在于文件上传到服务器后，服务器怎处理和解释文件</p>
 <p>常见校验上传文件的方法</p>
 <h2 id="客户端校验"><a href="#客户端校验" class="headerlink" title="客户端校验"></a>客户端校验</h2><p>​        1、通过javascript来校验上传文件的猴嘴是否合法，可以采用白名单，也可以采用黑名单的方式</p>
 <p>​        2、判断方式：在浏览器加载文件，但还未点击上传按钮便弹出对话框，内容如：只允许上传.jpg/.jpeg/.png后缀名的文件，而此时并没有发送数据包</p>

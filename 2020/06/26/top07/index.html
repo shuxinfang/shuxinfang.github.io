@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="往后余生,OWASP top10之七7，缺少功能级的访问控制概念原理大多数wed应用程序的功能在UI页面之前，会验证功能级别的访问权限，但是，应用程式需要在每个功能被访问时在服务器端执行相同的访问控制检查。如,"> 
+    <meta name="description" content="往后余生,OWASP top10之七7，缺少功能级的访问控制概念原理大多数web应用程序的功能在UI页面之前，会验证功能级别的访问权限，但是，应用程式需要在每个功能被访问时在服务器端执行相同的访问控制检查。如,"> 
     <meta name="author" content="小树"> 
     <link rel="alternative" href="atom.xml" title="醉芳" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -62,7 +62,7 @@
 
         </div>
         <div class="content markdown">
-            <h1 id="OWASP-top10之七"><a href="#OWASP-top10之七" class="headerlink" title="OWASP top10之七"></a>OWASP top10之七</h1><h2 id="7，缺少功能级的访问控制"><a href="#7，缺少功能级的访问控制" class="headerlink" title="7，缺少功能级的访问控制"></a>7，缺少功能级的访问控制</h2><h3 id="概念原理"><a href="#概念原理" class="headerlink" title="概念原理"></a>概念原理</h3><p>大多数wed应用程序的功能在UI页面之前，会验证功能级别的访问权限，但是，应用程式需要在每个功能被访问时在服务器端执行相同的访问控制检查。如果请求没有被验证，攻击者能够伪造请求从而在未经适当授权时访问功能</p>
+            <h1 id="OWASP-top10之七"><a href="#OWASP-top10之七" class="headerlink" title="OWASP top10之七"></a>OWASP top10之七</h1><h2 id="7，缺少功能级的访问控制"><a href="#7，缺少功能级的访问控制" class="headerlink" title="7，缺少功能级的访问控制"></a>7，缺少功能级的访问控制</h2><h3 id="概念原理"><a href="#概念原理" class="headerlink" title="概念原理"></a>概念原理</h3><p>大多数web应用程序的功能在UI页面之前，会验证功能级别的访问权限，但是，应用程式需要在每个功能被访问时在服务器端执行相同的访问控制检查。如果请求没有被验证，攻击者能够伪造请求从而在未经适当授权时访问功能</p>
 <p>a：合法用户是否能够正常登录，需要测试</p>
 <p>b：匿名或者攻击者等没有权限的用户是否会被拒绝登录，并且不能访问到需要登录之后才能访问到的页面</p>
 <h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><p>1，保证合法授权用户可以访问成功</p>
@@ -72,7 +72,7 @@
 <p>防御措施</p>
 <p>1，设计严格的权限控制系统，对于每个请求和URL都要进行校验和权限确认，防止非法请求被执行</p>
 <p>2，对于每个功能的访问，都要有明确的角色授权，采 用过滤器的方式校验每个请求的合法性</p>
-<p>3，实现wed访问的ip白名单列表，禁止不可信的ip访问wed系统</p>
+<p>3，实现web访问的ip白名单列表，禁止不可信的ip访问web系统</p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="true">
